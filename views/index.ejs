@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="main">
+      <h1><%= title %></h1>
+      <p>Welcome to <%= title || message %></p>
+      <p>
+        <%= customers.length %> Clientes Cadastrado
+      </p>
+      <h4>Clientes Cadastrados</h4>
+      <table>
+        <thead >
+          <tr>
+            <td>Nome</td>
+            <td>Idade</td>
+            <td>Região</td>
+            <td>UF</td>
+            <td>Ações</td>
+          </tr>
+        </thead>
+        <% customers.map((client) => { %>
+          <tbody>
+              <tr>
+              <td> <%= client.nome %></td> 
+              <td> <%= client.idade %></td>
+              <td> <%= client.regiao %></td>
+              <td> <%= client.uf %></td>
+              <td>
+                <a href="/edit/<%= client._id %>" onclick="pegar()">
+                <img src="/images/edit.png" alt="editar" width="15">
+                 </a> |
+                  <a href="/delete/<%=client._id %>" title="excluir"
+                     onclick="return confirm('Tem certeza que deseja excluir esse Cliente?')">
+                    <img src="/images/lixo.png" alt="excluir" width="15">
+                  </a>
+                </td>
+              </tr>
+          <%  })  %>
+          </tbody>
+      </table>
+      <div class="line"></div>
+      <h3><%= titleFor %></h3>
+      <div class="cadastro">
+        <form action="/post" method="POST">
+          <div class="l">
+            <label for="nome"> Nome: 
+              <input type="text" name="nome" id="nome" value="<%= customer.nome %>"/>
+            </label>
+            <label for="regiao"> Região:
+              <select 
+              type="text" name="regiao" id="regiao"
+               style="min-width: 100px; max-width: 150px;"               
+               >
+               
+              </select>
+
+              <select name="uf" id="uf" value="<%=customers[0].uf%>" onclick="pegar()">                
+
+              </select>
+              </label>
+          </div>
+          <div class="d">
+            <label for="idade"> Idade:
+              <input type="number" name="idade" id="idade" value="<%= customer.idade %>">
+              </label>
+              <input type="hidden" name="id" id="id" value="<%= customer._id%>">
+            <input type="submit" value="Salvar" id="salvar">
+            <a href="/"
+             style="padding: 5px; background: #ccc; width: 55px; color: #000; text-decoration: none;">
+             Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+      <script>
+        if(window.location.search){
+          const error = window.location.search.split('=')
+          alert(decodeURI(error[1]))
+        }
+        // busca dados na api do ibge
+        fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+            .then((result) => result.json())
+            .then(json => {
+                const ufsHtml = document.getElementById("uf")
+                // ordena os item recebidos da api
+                const siglas = json.map(item => item.sigla).sort()
+                /* Cria um elemento option para cada
+                * item retornado da api
+                * pegando a sigla 
+                */ 
+                siglas.forEach(item => {
+                  const opt = document.createElement("option")
+                  opt.innerText = item
+                  ufsHtml.add(opt)
+
+                });
+                // const reg = document.getElementById('regiao')
+                // reg.attributes
+                // colocar o valor da uf retornada do banco dentro da option uf
+                <%
+                  if(customers[0].uf){
+                %> 
+                  document.getElementById('uf').value ='<%= customers[0].uf %>'
+               <%
+                 }
+               %>
+
+            })
+            .catch((err) => {
+              alert(err)
+            });
+            function pegar(){
+                  const es = document.getElementById('uf').value
+                  const reg = document.getElementById('regiao')
+                  if(reg.childElementCount > 0){
+                    while(reg.firstChild){
+                      reg.removeChild(reg.firstChild)
+                    }
+                  }
+
+                  // var elemento = document.getElementById("topo");
+                  // while (elemento.firstChild) {
+                  //   elemento.removeChild(elemento.firstChild);
+                  // }
+
+                  
+                  // if(reg.childElementCount > 0) {
+                  //   console.log(reg.children);
+                  //   reg.removeChild('optin')            
+
+                  // }
+                  fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${es}/municipios`)
+                  .then((result) => result.json())
+                  .then(json => {
+                    json.forEach(item => {
+                        const opt = document.createElement('option')
+                        opt.innerText = item.nome
+                        reg.add(opt)
+                       
+                      })
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                    
+                }
+
+                <%
+                  if(customer.regiao){
+                %> 
+                 const regiao = document.getElementById('regiao')
+                 const opt = document.createElement('option')
+                 opt.innerText = "<%= customer.regiao %>"
+                 regiao.appendChild(opt)
+               <%
+                 }
+               %>
+
+      </script>
+  </body>
+</html>

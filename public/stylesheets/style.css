@@ -1,0 +1,80 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  max-width: 1200px;
+}
+div.main{
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 20px;
+  background-color: rgb(211, 207, 207);
+  border-radius: 10px;
+  box-shadow: 30px rgba(0, 0, 0,0.9);
+}
+
+a {
+  color: #00B7FF;
+  margin: 0;
+}
+.line{
+  max-width: 500px;
+  height: 2px;
+  background-color: #fff;
+  margin-top: 15px;
+}
+table{
+ width: 400px;
+ text-align: center;
+}
+table thead tr{
+  background-color: #ebebeb;
+}
+table thead tr td {
+  margin: 10px;
+
+}
+table tbody:hover {
+  background-color: #6666;
+  cursor: pointer;
+}
+.cadastro {
+  background-color: #999;
+  border-radius: 10px;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+  transition: 0.8s;
+}
+form{
+  display: flex;
+}
+form .l, .d{
+  display: flex;
+  flex-direction: column;
+}
+form input {
+  border-radius: 5px;
+  border-style: outset;
+  margin: 5px;
+  padding: 3px;
+  border: none;
+}
+form input#salvar{
+  max-width: 100px;
+  margin-left: 50px;
+  margin-top: 15px;
+  background-color: #4545e9;
+  padding: 7px 0;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  transition: 1s;
+}
+form input#salvar:hover{
+  background: linear-gradient(#4545e9 ,#00B7FF );
+  color: #fff;
+  font-weight: bolder;
+}
